@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.pitch {
+    width: 100%;
+    max-width: 900px;
+    height: 600px;
+    margin: auto;
+    background: linear-gradient(to bottom, #1db954, #16a34a);
+    border-radius: 20px;
+    position: relative;
+    border: 3px solid white;
+    overflow: hidden;
+}
+
+.pitch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, transparent 49%, rgba(255,255,255,0.3) 50%, transparent 51%),
+        linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.3) 50%, transparent 51%);
+    opacity: 0.3;
+}
+
+.zone {
+    position: absolute;
+    border: 2px dashed rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+
+.zone.por { bottom: 10px; left: 50%; transform: translateX(-50%); width: 120px; height: 90px; }
+.zone.dif { bottom: 120px; left: 50%; transform: translateX(-50%); width: 90%; height: 120px; }
+.zone.cen { bottom: 280px; left: 50%; transform: translateX(-50%); width: 90%; height: 120px; }
+.zone.att { top: 40px; left: 50%; transform: translateX(-50%); width: 90%; height: 120px; }
+
+.player {
+    width: 95px;
+    padding: 6px;
+    background: #0f172a;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 12px;
+    cursor: grab;
+    border: 2px solid #38bdf8;
+    color: white;
+    user-select: none;
+    margin: 5px;
+}
+
+.player:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+}
+
+.role {
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+#bench, .zone {
+    min-height: 80px;
+}
+</style>
+
+<div class="card">
+    <h2>👤 {{ squadra_nome }}</h2>
+
+    {% if stemma %}
+        <img src="{{ stemma }}" width="70">
+    {% endif %}
+
+    <p><b>Divisa:</b> {{ divisa }}</p>
+</div>
+
+<div class="card">
+    <h3>🏟️ Campo Formazione</h3>
+
+    <div class="pitch">
+
+        <div class="zone por" ondrop="drop(event,'POR')" ondragover="allowDrop(event)"></div>
+        <div class="zone dif" ondrop="drop(event,'DIF')" ondragover="allowDrop(event)"></div>
+        <div class="zone cen" ondrop="drop(event,'CEN')" ondragover="allowDrop(event)"></div>
+        <div class="zone att" ondrop="drop(event,'ATT')" ondragover="allowDrop(event)"></div>
+
+    </div>
+</div>
+
+<div class="card">
+    <h3>🪑 Panchina</h3>
+
+    <div id="bench">
+        {% for g in panchina %}
+            {% set parts = g.split('|') %}
+            <div class="player"
+                 draggable="true"
+                 ondragstart="drag(event)"
+                 id="p{{ loop.index }}"
+                 data-role="{{ parts[1] }}"
+                 data-value="{{ g }}">
+
+                <div>{{ parts[0] }}</div>
+                <div class="role">{{ parts[1] }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <button onclick="salvaFormazione()" style="padding:10px 15px; background:#38bdf8; border:none; border-radius:8px; cursor:pointer;">
+        💾 Salva Formazione
+    </button>
+</div>
+
+<script>
+
+function allowDrop(ev){
+    ev.preventDefault();
+}
+
+function drag(ev){
+    ev.dataTransfer.setData("id", ev.target.id);
+    ev.dataTransfer.setData("role", ev.target.dataset.role);
+}
+
+/* 🔒 controllo ruolo + anti duplicati */
+function drop(ev, zoneRole){
+    ev.preventDefault();
+
+    let id = ev.dataTransfer.getData("id");
+    let role = ev.dataTransfer.getData("role");
+
+    let el = document.getElementById(id);
+
+    if(role !== zoneRole){
+        alert("❌ Ruolo non valido per questa zona!");
+        return;
+    }
+
+    // evita duplicati (se già dentro una zona)
+    document.querySelectorAll(".zone, #bench").forEach(z => {
+        if(z.contains(el)) z.removeChild(el);
+    });
+
+    ev.target.appendChild(el);
+}
+
+/* 💾 SALVATAGGIO */
+function salvaFormazione(){
+
+    let titolari = [];
+    let panchina = [];
+
+    document.querySelectorAll(".zone").forEach(zone => {
+        zone.querySelectorAll(".player").forEach(p => {
+            titolari.push(p.dataset.value);
+        });
+    });
+
+    document.querySelectorAll("#bench .player").forEach(p => {
+        panchina.push(p.dataset.value);
+    });
+
+    fetch("/salva_formazione", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            titolari: titolari,
+            panchina: panchina
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.ok){
+            alert("✅ Formazione salvata!");
+        } else {
+            alert("❌ Errore salvataggio");
+        }
+    });
+
+}
+
+</script>
+
+{% endblock %}

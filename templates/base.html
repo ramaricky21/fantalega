@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fantalega</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+        }
+
+        /* TOGGLE */
+        .toggle-btn{
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #38bdf8;
+            color: black;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        #toggleSidebar{
+            display: none;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #111827;
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            transition: 0.3s;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 12px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: #1f2937;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #38bdf8;
+            color: black;
+        }
+
+        /* CONTENT */
+        .content {
+            margin-left: 240px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        /* CARD */
+        .card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        /* TOGGLE EFFECT */
+        #toggleSidebar:checked ~ .sidebar {
+            left: -260px;
+        }
+
+        #toggleSidebar:checked ~ .content {
+            margin-left: 20px;
+        }
+
+        /* 🔥 SPONSOR TOP BAR (LASCIATO) */
+        .sponsor-bar {
+            background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+            color: black;
+            padding: 8px 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 15px rgba(56,189,248,0.5);
+        }
+
+    </style>
+</head>
+
+<body>
+
+<input type="checkbox" id="toggleSidebar">
+<label for="toggleSidebar" class="toggle-btn">☰</label>
+
+<!-- 🔥 SPONSOR TOP BAR (RIMANE) -->
+<div class="sponsor-bar">
+    ⚽ Sponsor ufficiale Fantalega: REAL ENERGY DRINK ⚡
+</div>
+
+<div class="sidebar">
+    <h2>⚽ Fantalega</h2>
+
+    <a href="/">🏠 Home</a>
+    <a href="/dashboard">👤 Squadra</a>
+    <a href="/classifica">🏆 Classifica</a>
+    <a href="/rosa">👥 Rose</a>
+    <a href="/calendario">📅 Calendario</a>
+    <a href="/storico">📊 Storico</a>
+    <a href="/settings">⚙️ Impostazioni</a>
+
+    {% if session.get("role") == "admin" %}
+        <hr>
+        <a href="/admin_voti">🛠️ Admin Voti</a>
+        <a href="/import_voti">📥 Import Excel</a>
+    {% endif %}
+
+    <a href="/logout">🚪 Logout</a>
+</div>
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

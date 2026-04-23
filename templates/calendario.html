@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>📅 Calendario</h2>
+
+    {% for p in partite %}
+        <div class="card">
+            <b>Giornata {{ p[0] }}</b><br>
+            {{ p[1] }} vs {{ p[2] }}<br>
+            {{ p[3] }} - {{ p[4] }}
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

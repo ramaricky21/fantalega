@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>👕 Editor Divisa PRO</h2>
+
+    <form method="POST">
+
+        <label>🖼️ Stemma (URL)</label><br>
+        <input type="text" name="stemma" id="stemma"><br><br>
+
+        <label>🎨 Colore principale</label><br>
+        <input type="color" id="colore" value="#1f2937"><br><br>
+
+        <label>🎨 Colore secondario</label><br>
+        <input type="color" id="colore2" value="#000000"><br><br>
+
+        <label>👕 Pattern</label><br>
+        <select id="pattern">
+            <option value="none">Base</option>
+            <option value="vertical">Strisce verticali</option>
+            <option value="horizontal">Strisce orizzontali</option>
+            <option value="diagonal">Diagonale</option>
+            <option value="check">Check (scacchi)</option>
+        </select>
+
+        <br><br>
+        <button type="submit">💾 Salva</button>
+    </form>
+
+    <hr>
+
+    <h3>👀 Anteprima maglia (FIFA STYLE)</h3>
+
+    <svg id="shirt" width="240" height="240" viewBox="0 0 200 200"></svg>
+</div>
+
+<script>
+
+const colore = document.getElementById("colore");
+const colore2 = document.getElementById("colore2");
+const pattern = document.getElementById("pattern");
+const stemma = document.getElementById("stemma");
+const svg = document.getElementById("shirt");
+
+function drawPattern(c1, c2, type){
+
+    let defs = `
+    <defs>
+
+        <!-- LUCE CENTRALE REALISTICA -->
+        <linearGradient id="shine" x1="0" x2="1">
+            <stop offset="0%" stop-color="white" stop-opacity="0.18"/>
+            <stop offset="50%" stop-color="white" stop-opacity="0"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0.12"/>
+        </linearGradient>
+
+        <!-- OMBRA LATERALE -->
+        <linearGradient id="shadowSide" x1="0" x2="1">
+            <stop offset="0%" stop-color="black" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="transparent"/>
+        </linearGradient>
+
+        <pattern id="vertical" width="20" height="20" patternUnits="userSpaceOnUse">
+            <rect width="10" height="20" fill="${c1}"/>
+            <rect x="10" width="10" height="20" fill="${c2}"/>
+        </pattern>
+
+        <pattern id="horizontal" width="20" height="20" patternUnits="userSpaceOnUse">
+            <rect width="20" height="10" fill="${c1}"/>
+            <rect y="10" width="20" height="10" fill="${c2}"/>
+        </pattern>
+
+        <pattern id="diagonal" width="20" height="20" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <rect width="10" height="20" fill="${c1}"/>
+            <rect x="10" width="10" height="20" fill="${c2}"/>
+        </pattern>
+
+        <pattern id="check" width="20" height="20" patternUnits="userSpaceOnUse">
+            <rect width="10" height="10" fill="${c1}"/>
+            <rect x="10" y="10" width="10" height="10" fill="${c1}"/>
+            <rect x="10" width="10" height="10" fill="${c2}"/>
+            <rect y="10" width="10" height="10" fill="${c2}"/>
+        </pattern>
+
+    </defs>
+    `;
+
+    let fill = c1;
+
+    if(type === "vertical") fill = "url(#vertical)";
+    if(type === "horizontal") fill = "url(#horizontal)";
+    if(type === "diagonal") fill = "url(#diagonal)";
+    if(type === "check") fill = "url(#check)";
+
+    svg.innerHTML = defs + `
+
+        <!-- OMBRA (PROFONDITÀ 3D) -->
+        <path d="M50 40 L80 20 L120 20 L150 40 L150 160 L50 160 Z"
+              fill="url(#shadowSide)" opacity="0.6"/>
+
+        <!-- MAGLIA BASE -->
+        <path d="M50 40 L80 20 L120 20 L150 40 L150 160 L50 160 Z"
+              fill="${fill}"
+              stroke="rgba(0,0,0,0.6)"
+              stroke-width="1"/>
+
+        <!-- LUCE CENTRALE (EFFETTO FIFA) -->
+        <path d="M70 40 L90 25 L110 25 L130 40 L130 160 L70 160 Z"
+              fill="url(#shine)"/>
+
+        <!-- MANICHE -->
+        <polygon points="50,40 30,60 50,80" fill="${c1}" />
+        <polygon points="150,40 170,60 150,80" fill="${c1}" />
+
+        <!-- BORDO LEGGERO -->
+        <path d="M50 40 L80 20 L120 20 L150 40 L150 160 L50 160 Z"
+              fill="none"
+              stroke="rgba(255,255,255,0.08)"
+              stroke-width="1"/>
+
+        <!-- STEMMA -->
+        ${stemma.value ? `<image href="${stemma.value}" x="85" y="70" width="30" height="30"/>` : ""}
+
+    `;
+}
+
+function update(){
+    drawPattern(colore.value, colore2.value, pattern.value);
+}
+
+colore.oninput = update;
+colore2.oninput = update;
+pattern.onchange = update;
+stemma.oninput = update;
+
+update();
+
+</script>
+
+{% endblock %}

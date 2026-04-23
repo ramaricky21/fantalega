@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Andamento Squadre</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+
+        h2 {
+            margin: 20px;
+            text-align: left;
+        }
+
+        .container {
+            width: 95%;
+            margin: 0 auto;
+            padding: 10px 20px;
+        }
+
+        canvas {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            width: 100% !important;
+            height: 500px !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>📊 Andamento Squadre</h2>
+
+    <canvas id="grafico"></canvas>
+
+</div>
+
+<script>
+fetch("/api_andamento")
+    .then(res => res.json())
+    .then(data => {
+
+        const ctx = document.getElementById("grafico").getContext("2d");
+
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: data.labels,
+                datasets: data.datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<h1>📰 News Giornata</h1>
+
+<style>
+body { background:#0b1220; color:white; font-family:Arial; }
+.card {
+    background:#1f2a44;
+    padding:10px;
+    margin:10px;
+    border-radius:10px;
+}
+</style>
+
+{% for g in giornate %}
+<div class="card">
+    <b>{{ g.A }} vs {{ g.B }}</b><br>
+    {{ g.risultato }}<br>
+    ⚽ {{ g.puntiA }} - {{ g.puntiB }}
+</div>
+{% endfor %}

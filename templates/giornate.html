@@ -1,0 +1,9 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<h1>Giornate</h1>
+
+{% for g in giornate %}
+    <div style="margin-bottom:10px;">
+        <b>{{ g.A }}</b> {{ g.puntiA }} - {{ g.puntiB }} <b>{{ g.B }}</b><br>
+        Risultato: {{ g.risultato }}
+    </div>
+{% endfor %}

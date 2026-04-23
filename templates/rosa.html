@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>👥 Rose Squadre</h2>
+
+{% for s in dati %}
+
+<div class="card">
+    <h3>{{ s.squadra }}</h3>
+
+    {% for g in s.giocatori %}
+        <p>{{ g[0] }} - {{ g[1] }}</p>
+    {% endfor %}
+</div>
+
+{% endfor %}
+
+{% endblock %}

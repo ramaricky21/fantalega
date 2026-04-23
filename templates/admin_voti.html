@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<h2>Inserisci voti giornata</h2>
+
+<form method="POST">
+
+    Giornata: <input type="number" name="giornata" required><br><br>
+
+    {% for p in players %}
+        <div style="margin-bottom:10px;">
+            <b>{{p.nome}} ({{p.ruolo}})</b><br>
+
+            Voto: <input type="number" step="0.1" name="voto_{{p.nome}}">
+
+            Gol: <input type="number" name="gol_{{p.nome}}" value="0">
+            Assist: <input type="number" name="assist_{{p.nome}}" value="0">
+            Amm: <input type="number" name="amm_{{p.nome}}" value="0">
+            Esp: <input type="number" name="esp_{{p.nome}}" value="0">
+	    Rig. parato: <input type="number" name="rigpar_{{p.nome}}" value="0">
+	    Rig. sbagliato: <input type="number" name="rigsba_{{p.nome}}" value="0">
+	    Rig. segnato: <input type="number" name="rigseg_{{p.nome}}" value="0"><br>
+
+	    Autogoal: <input type="number" name="auto_{{p.nome}}" value="0">
+	    Goal subiti: <input type="number" name="gs_{{p.nome}}" value="0">
+	    Porta inviolata: <input type="number" name="pi_{{p.nome}}" value="0"><br>
+
+	    MVP: <input type="number" name="potm_{{p.nome}}" value="0">
+        </div>
+    {% endfor %}
+
+    <button type="submit">Salva</button>
+</form>

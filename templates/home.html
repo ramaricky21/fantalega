@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>⚽ Fantalega</h2>
+</div>
+
+{% if not user %}
+
+<div class="card">
+    <h3>Benvenuto</h3>
+    <a href="/login">🔐 Login</a>
+</div>
+
+{% else %}
+
+<div id="userCard" class="card"></div>
+
+<div class="card">
+    <a href="/dashboard">👕 Formazione</a>
+    <a href="/classifica">🏆 Classifica</a>
+    <a href="/calendario">📅 Calendario</a>
+    <a href="/rosa">👥 Rose</a>
+    <a href="/storico">📊 Storico</a>
+    <a href="/grafico">📈 Grafici</a>
+    <a href="/settings">⚙️ Editor Maglia</a>
+    <a href="/logout">🚪 Logout</a>
+</div>
+
+<script>
+fetch("/api_user")
+.then(r => r.json())
+.then(data => {
+
+    if(!data.squadra) return;
+
+    let divisa = data.divisa || "#1f2937|#000000|none";
+    let parts = divisa.split("|");
+
+    let c1 = parts[0];
+    let c2 = parts[1];
+    let pattern = parts[2];
+
+    let bg = c1;
+
+    if(pattern === "vertical"){
+        bg = `repeating-linear-gradient(90deg, ${c1}, ${c1} 20px, ${c2} 20px, ${c2} 40px)`;
+    }
+    if(pattern === "horizontal"){
+        bg = `repeating-linear-gradient(0deg, ${c1}, ${c1} 20px, ${c2} 20px, ${c2} 40px)`;
+    }
+    if(pattern === "diagonal"){
+        bg = `repeating-linear-gradient(45deg, ${c1}, ${c1} 20px, ${c2} 20px, ${c2} 40px)`;
+    }
+
+    let stemma = data.stemma || "";
+
+    document.getElementById("userCard").innerHTML = `
+        <h3>${data.squadra}</h3>
+        ${stemma ? `<img src="${stemma}" width="60">` : ""}
+        <p>La tua squadra</p>
+    `;
+});
+</script>
+
+{% endif %}
+
+{% endblock %}

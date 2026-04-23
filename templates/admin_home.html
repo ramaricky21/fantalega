@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        a {
+            display: block;
+            padding: 10px;
+            margin: 8px 0;
+            background: #334155;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        a:hover {
+            background: #38bdf8;
+            color: black;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h2>🛠️ ADMIN CONTROL PANEL</h2>
+        <p>Gestione completa Fantalega</p>
+    </div>
+
+    <div class="card">
+        <h3>⚙️ Gestione Sistema</h3>
+
+        <a href="/admin_voti">✏️ Modifica Voti</a>
+        <a href="/import_voti">📥 Import Excel</a>
+        <a href="/simula">▶️ Simula Giornata</a>
+    </div>
+
+    <div class="card">
+        <h3>📊 Monitoraggio</h3>
+
+        <a href="/debug_partite">🔍 Debug Partite</a>
+        <a href="/debug_squadre">👥 Debug Squadre</a>
+        <a href="/classifica">🏆 Classifica (solo visione)</a>
+        <a href="/grafico">📈 Grafico Andamento</a>
+    </div>
+
+    <div class="card">
+        <h3>📂 Dati Lega</h3>
+
+        <a href="/rosa">👥 Rose squadre</a>
+        <a href="/calendario">📅 Calendario</a>
+    </div>
+
+    <div class="card">
+        <a href="/logout">🚪 Logout</a>
+    </div>
+
+</div>
+
+</body>
+</html>

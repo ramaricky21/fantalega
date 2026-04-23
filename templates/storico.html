@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>📊 Storico ultime partite</h2>
+
+{% for p in partite %}
+
+{% set colore = "gray" %}
+{% if p[3] > p[4] %}
+    {% set colore = "green" %}
+{% elif p[3] < p[4] %}
+    {% set colore = "red" %}
+{% endif %}
+
+<div class="card" style="border-left: 5px solid {{ colore }}">
+    <b>Giornata {{ p[0] }}</b><br>
+    {{ p[1] }} {{ p[3] }} - {{ p[4] }} {{ p[2] }}
+</div>
+
+{% endfor %}
+
+{% endblock %}

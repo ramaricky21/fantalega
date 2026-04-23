@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recupero Password</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+
+            background: 
+                linear-gradient(rgba(2,6,23,0.85), rgba(2,6,23,0.85)),
+                url("/static/img/curva_sud.jpg") no-repeat center center fixed;
+
+            background-size: cover;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .box {
+            background: rgba(17,24,39,0.92);
+            padding: 30px;
+            border-radius: 16px;
+            width: 320px;
+            text-align: center;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        input {
+            background: #1f2937;
+            color: white;
+        }
+
+        button {
+            background: #38bdf8;
+        }
+
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+
+        input::placeholder {
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>🔁 Recupero password</h2>
+
+    <form method="post">
+        <input name="username" placeholder="Username" required>
+        <button type="submit">Recupera</button>
+    </form>
+
+    {% if data %}
+        <p><b>Suggerimento:</b> {{ data[1] }}</p>
+        <p><b>Password:</b> {{ data[0] }}</p>
+    {% endif %}
+
+    <a href="/login">⬅ Torna al login</a>
+
+</div>
+
+</body>
+</html>
