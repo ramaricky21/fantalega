@@ -1412,5 +1412,8 @@ def admin_home():
 
     return render_template("admin_home.html")
 
+from flask import render_template
+
+
 if __name__ == "__main__":
     app.run(debug=True)
